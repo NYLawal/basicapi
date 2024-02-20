@@ -1,13 +1,14 @@
-const { application, application } = require("express");
+// const { application, application } = require("express");
 
 const baseUrl = "http://localhost:5000/"
+let returnValue;
 
 // =========================================================================
 // Get method with fetch api, utilising fetchUser and displayUsers functions
 // =========================================================================
 const fetchUser = () => {
     const url = `${baseUrl}showUsers`;
-    fetch(url)
+        fetch(url)
         .then(function (r) {
             console.log(r)
             return r.json();
@@ -21,7 +22,7 @@ const fetchUser = () => {
 }
 fetchUser();
 
-function displayUsers(res) {
+  function displayUsers(res) {
     const tBody = document.getElementById('userList');
     let htmlData = "";
     for (i = 0; i < res.length; i++) {
@@ -35,6 +36,42 @@ function displayUsers(res) {
     tBody.innerHTML = htmlData;
 }
 
+function alertPost(){
+return Swal.fire({
+    toast: true,
+    icon: 'success',
+    title: 'Posted successfully',
+    animation: false,
+    position: 'bottom',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+}
+function alertUsernameError(){
+    Swal.fire({
+        title:"Fullname Error",
+        text:"Incorrect fullname: put a space between your first and last names",
+        icon: "error",
+      });
+    }
+function checkValid(data){
+    const regText = /[A-Za-z]\s[A-Za-z]/;
+    if (regText.test(data.fullname)){
+        returnValue =true;
+    //  return returnValue
+    }
+    else{
+        document.getElementById("fullname").focus();
+        returnValue = false;
+        alertUsernameError();
+    }
+    return returnValue
+}
 // ==========================================================================
 // Post method with axios, utilising FormData object and form submit listener
 // ==========================================================================
@@ -45,14 +82,19 @@ const formData =new FormData(form)
 const formDataObj = {};
 formData.forEach((value, key) => (formDataObj[key] = value));
 console.log(formDataObj);
+checkValid(formDataObj)
+console.log(returnValue)
+if(returnValue){
 axios.post("http://localhost:5000/register",formDataObj)
 .then(function(response){
+// alertPost();
 fetchUser();
 console.log(response.data)
 })
 .catch(err=>{
     console.log(err)
 })
+}
 });
 
 // ====================================================================================
@@ -110,7 +152,29 @@ console.log(response.data)
 // ================================================================================================ 
 
 
+// function confirmDeletion(buttonName, index, successText = "Success") {
 
+//     Swal.fire({
+//         title: 'Are you sure?',
+//         text: "You won't be able to revert this!",
+//         icon: 'warning',
+//         color: '#EBF1F5',
+//         background: '#1d2333',
+//         showCancelButton: true,
+//         reverseButtons: true,
+//         confirmButtonColor: '#bd1d32',
+//         cancelButtonColor: '#1d2333',
+//         confirmButtonText: 'Yes, delete it!'
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+
+//             document.getElementById(buttonName + "[" + index + "]").click();
+
+//             successToast(successText);
+//         };
+//     });
+
+// };
 
 
 
