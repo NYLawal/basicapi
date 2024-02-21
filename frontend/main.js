@@ -17,7 +17,11 @@ const fetchUser = () => {
             displayUsers(res)
         })
         .catch(function (err) {
-            console.log(err)
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error Connection to the database",
+          });
         })
 }
 fetchUser();
